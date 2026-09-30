@@ -50,6 +50,8 @@ Fork von [„Payback Manual Activate Coupons“](https://greasyfork.org/scripts/
 > Rund 150 Gutscheine auf einmal zu aktivieren hat funktioniert, bei über 160 auf einmal kam eine
 > vorübergehende Sperre. Falls du gesperrt wirst, erhöhe die Verzögerung.
 
+### Installation
+
 1. [Tampermonkey](https://tampermonkey.net/) installieren.
 2. [`payback-coupon-activator.user.js`](https://github.com/Jake-double-one/payback-coupon-activator/raw/main/payback-coupon-activator.user.js)
    öffnen – Tampermonkey bietet die Installation an.
