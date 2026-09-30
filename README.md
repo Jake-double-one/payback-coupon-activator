@@ -14,9 +14,13 @@ Fork of ["Payback Manual Activate Coupons"](https://greasyfork.org/scripts/55176
 ### How it works
 
 - Clicking **▶ Activate Coupons** counts all non-activated coupons.
-- Clicks them one after another with a random delay of 250–600 ms (≈ 70 s for 160 coupons).
+- Clicks them one after another with a random delay of 10–250 ms (≈ 20 s for 150 coupons).
 - The button shows the progress (`⏳ 73/163`); clicking it again stops.
 - The delay can be changed via `CLICK_DELAY_MIN` / `CLICK_DELAY_MAX` at the top of the script.
+
+> **Note:** Payback's exact limits are unknown. The 10–250 ms delay is a guess: activating
+> about 150 coupons at once worked, while more than 160 at once triggered a temporary block.
+> If you get blocked, increase the delay.
 
 ### Installation
 
@@ -38,11 +42,13 @@ Fork von [„Payback Manual Activate Coupons“](https://greasyfork.org/scripts/
 ### Funktionsweise
 
 - Zählt beim Klick auf **▶ Gutscheine aktivieren** alle nicht aktivierten Gutscheine.
-- Klickt sie nacheinander mit 250–600 ms zufälliger Verzögerung an (≈ 70 s für 160 Gutscheine).
+- Klickt sie nacheinander mit 10–250 ms zufälliger Verzögerung an (≈ 20 s für 150 Gutscheine).
 - Der Knopf zeigt den Fortschritt (`⏳ 73/163`); ein erneuter Klick stoppt.
 - Die Verzögerung lässt sich über `CLICK_DELAY_MIN` / `CLICK_DELAY_MAX` oben im Skript ändern.
 
-### Installation
+> **Hinweis:** Die genauen Limits von Payback sind nicht bekannt. Die 10–250 ms sind ein Erfahrungswert:
+> Rund 150 Gutscheine auf einmal zu aktivieren hat funktioniert, bei über 160 auf einmal kam eine
+> vorübergehende Sperre. Falls du gesperrt wirst, erhöhe die Verzögerung.
 
 1. [Tampermonkey](https://tampermonkey.net/) installieren.
 2. [`payback-coupon-activator.user.js`](https://github.com/Jake-double-one/payback-coupon-activator/raw/main/payback-coupon-activator.user.js)
