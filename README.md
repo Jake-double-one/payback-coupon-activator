@@ -1,4 +1,4 @@
-# Payback Activate Coupons Slowly
+# Payback Coupon Activator
 
 **[English](#english) · [Deutsch](#deutsch)**
 
@@ -28,7 +28,11 @@ Fork of ["Payback Manual Activate Coupons"](https://greasyfork.org/scripts/55176
 2. Open [`payback-coupon-activator.user.js`](https://github.com/Jake-double-one/payback-coupon-activator/raw/main/payback-coupon-activator.user.js)
    – Tampermonkey will offer to install it.
 
-If the original script is installed, disable it first, otherwise two buttons will appear.
+Updates are installed automatically: Tampermonkey checks the script on GitHub regularly
+(default: daily) and installs newer versions.
+
+If the original script or an older version of this script under a different name
+(e.g. "Payback Activate Coupons Slowly") is installed, remove it, otherwise two buttons will appear.
 
 ## Deutsch
 
@@ -56,4 +60,8 @@ Fork von [„Payback Manual Activate Coupons“](https://greasyfork.org/scripts/
 2. [`payback-coupon-activator.user.js`](https://github.com/Jake-double-one/payback-coupon-activator/raw/main/payback-coupon-activator.user.js)
    öffnen – Tampermonkey bietet die Installation an.
 
-Falls das Original-Skript installiert ist, dieses vorher deaktivieren, sonst erscheinen zwei Knöpfe.
+Updates werden automatisch installiert: Tampermonkey prüft das Skript regelmäßig auf GitHub
+(Standard: täglich) und installiert neuere Versionen.
+
+Falls das Original-Skript oder eine ältere Version dieses Skripts unter anderem Namen
+(z. B. „Payback Activate Coupons Slowly“) installiert ist, diese entfernen, sonst erscheinen zwei Knöpfe.
