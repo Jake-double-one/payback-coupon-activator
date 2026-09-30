@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name            Payback Activate Coupons Slowly
-// @name:en         Payback Activate Coupons Slowly
-// @name:ru         Payback активировать все купоны (с задержкой)
-// @name:de         Payback Gutscheine verzögert aktivieren
+// @name            Payback Coupon Activator
+// @name:en         Payback Coupon Activator
+// @name:ru         Payback активатор купонов
+// @name:de         Payback Gutschein-Aktivierer
 // @namespace       https://github.com/jake-double-one/payback-coupon-activator
-// @version         2.3.0
+// @version         3.0.0
 // @description:ru  Кнопка на странице для активации всех купонов по одному с задержкой
 // @description:de  Schaltfläche zur Aktivierung aller Gutscheine nacheinander mit Verzögerung
 // @description:en  Button on the page for activating all coupons one by one with a delay
@@ -16,6 +16,8 @@
 // @supportURL      https://github.com/jake-double-one/payback-coupon-activator/issues
 // @iconURL         https://www.payback.de/resource/blob/4506/b8323ff55b34054722769ae5652c22ae/main-favicon.ico
 // @license         MIT
+// @updateURL       https://raw.githubusercontent.com/Jake-double-one/payback-coupon-activator/main/payback-coupon-activator.user.js
+// @downloadURL     https://raw.githubusercontent.com/Jake-double-one/payback-coupon-activator/main/payback-coupon-activator.user.js
 // ==/UserScript==
 
 /*
