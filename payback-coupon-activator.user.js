@@ -4,7 +4,7 @@
 // @name:ru         Payback активировать все купоны (с задержкой)
 // @name:de         Payback Gutscheine verzögert aktivieren
 // @namespace       https://github.com/jake-double-one/payback-coupon-activator
-// @version         2.2.0
+// @version         2.3.0
 // @description:ru  Кнопка на странице для активации всех купонов по одному с задержкой
 // @description:de  Schaltfläche zur Aktivierung aller Gutscheine nacheinander mit Verzögerung
 // @description:en  Button on the page for activating all coupons one by one with a delay
@@ -33,8 +33,8 @@ Changes in this fork:
 
     // ---------- Settings ----------
 
-    const CLICK_DELAY_MIN = 250; // ms between single clicks (min)
-    const CLICK_DELAY_MAX = 600; // ms between single clicks (max)
+    const CLICK_DELAY_MIN = 10;  // ms between single clicks (min)
+    const CLICK_DELAY_MAX = 250; // ms between single clicks (max)
 
     // ---------- Texts ----------
 
