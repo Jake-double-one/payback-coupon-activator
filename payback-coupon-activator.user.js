@@ -1,14 +1,14 @@
 // ==UserScript==
-// @name            Payback Batch Activate Coupons
-// @name:en         Payback Batch Activate Coupons
-// @name:ru         Payback активировать все купоны (пакетами)
-// @name:de         Payback Gutscheine in Paketen aktivieren
+// @name            Payback Activate Coupons Slowly
+// @name:en         Payback Activate Coupons Slowly
+// @name:ru         Payback активировать все купоны (с задержкой)
+// @name:de         Payback Gutscheine verzögert aktivieren
 // @namespace       https://github.com/jake-double-one/payback-coupon-activator
-// @version         2.1.0
-// @description:ru  Кнопка на странице для активации всех купонов пакетами с паузами
-// @description:de  Schaltfläche zur Aktivierung aller Gutscheine in Paketen mit Pausen
-// @description:en  Button on the page for activating all coupons in batches with pauses
-// @description     Button on the page for activating all coupons in batches with pauses
+// @version         2.2.0
+// @description:ru  Кнопка на странице для активации всех купонов по одному с задержкой
+// @description:de  Schaltfläche zur Aktivierung aller Gutscheine nacheinander mit Verzögerung
+// @description:en  Button on the page for activating all coupons one by one with a delay
+// @description     Button on the page for activating all coupons one by one with a delay
 // @match           https://www.payback.de/coupons*
 // @grant           none
 // @run-at          document-end
@@ -23,11 +23,9 @@ Fork of "Payback Manual Activate Coupons" by Denis-Alexeev
 (https://github.com/Denis-Alexeev/MyUserScripts, MIT License).
 
 Changes in this fork:
-- Coupons are activated in batches (default: 50) instead of all at once.
-- Short random delay between single clicks and a pause between batches,
-  so Payback does not soft-block the account for too many requests.
+- Coupons are activated one by one with a short random delay between clicks
+  instead of all at once, so Payback does not soft-block the account.
 - The button shows live progress and can be clicked again to stop.
-- Batch size and delays can be changed via the ⚙ button (stored in localStorage).
 */
 
 (function () {
@@ -35,22 +33,8 @@ Changes in this fork:
 
     // ---------- Settings ----------
 
-    const DEFAULTS = {
-        batchSize: 50,     // coupons per batch
-        clickDelayMin: 250, // ms between single clicks (min)
-        clickDelayMax: 600, // ms between single clicks (max)
-        batchPause: 8000,   // ms pause between batches
-    };
-
-    function loadSettings() {
-        try {
-            return { ...DEFAULTS, ...JSON.parse(localStorage.getItem('pb_settings') || '{}') };
-        } catch (e) {
-            return { ...DEFAULTS };
-        }
-    }
-
-    let settings = loadSettings();
+    const CLICK_DELAY_MIN = 250; // ms between single clicks (min)
+    const CLICK_DELAY_MAX = 600; // ms between single clicks (max)
 
     // ---------- Texts ----------
 
@@ -66,12 +50,7 @@ Changes in this fork:
             found: (n) => `🔍 Found ${n} coupons.`,
             activated: (i) => `✅ Activated coupon #${i}`,
             progress: (c, t) => `⏳ ${c}/${t} – click to stop`,
-            pause: (s, c, t) => `⏸ Pause ${s}s (${c}/${t})`,
-            batch: (b, n) => `📦 Batch ${b}: ${n} coupons`,
             switchLabel: '🌐 Language:',
-            askBatch: 'Coupons per batch:',
-            askPause: 'Pause between batches (seconds):',
-            saved: '💾 Settings saved',
         },
         de: {
             btn: '▶ Gutscheine aktivieren',
@@ -82,12 +61,7 @@ Changes in this fork:
             found: (n) => `🔍 ${n} Gutscheine gefunden.`,
             activated: (i) => `✅ Gutschein #${i} aktiviert`,
             progress: (c, t) => `⏳ ${c}/${t} – Klick zum Stoppen`,
-            pause: (s, c, t) => `⏸ Pause ${s}s (${c}/${t})`,
-            batch: (b, n) => `📦 Paket ${b}: ${n} Gutscheine`,
             switchLabel: '🌐 Sprache:',
-            askBatch: 'Gutscheine pro Paket:',
-            askPause: 'Pause zwischen Paketen (Sekunden):',
-            saved: '💾 Einstellungen gespeichert',
         },
         ru: {
             btn: '▶ Активировать купоны',
@@ -98,12 +72,7 @@ Changes in this fork:
             found: (n) => `🔍 Найдено купонов: ${n}`,
             activated: (i) => `✅ Активирован купон #${i}`,
             progress: (c, t) => `⏳ ${c}/${t} – нажмите для остановки`,
-            pause: (s, c, t) => `⏸ Пауза ${s}с (${c}/${t})`,
-            batch: (b, n) => `📦 Пакет ${b}: ${n} купонов`,
             switchLabel: '🌐 Язык:',
-            askBatch: 'Купонов в пакете:',
-            askPause: 'Пауза между пакетами (секунды):',
-            saved: '💾 Настройки сохранены',
         }
     };
 
@@ -131,7 +100,7 @@ Changes in this fork:
 
     const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     const randomDelay = () =>
-        settings.clickDelayMin + Math.random() * (settings.clickDelayMax - settings.clickDelayMin);
+        CLICK_DELAY_MIN + Math.random() * (CLICK_DELAY_MAX - CLICK_DELAY_MIN);
 
     // Buttons that were already clicked are remembered, so a coupon whose button
     // does not disappear after activation is not clicked twice.
@@ -142,14 +111,6 @@ Changes in this fork:
             .filter((btn) => btn.isConnected && !clickedButtons.has(btn));
     }
 
-    async function pause(ms, clicked, total) {
-        const end = Date.now() + ms;
-        while (!stopRequested && Date.now() < end) {
-            setButtonText(T.pause(Math.ceil((end - Date.now()) / 1000), clicked, total));
-            await sleep(Math.min(250, end - Date.now()));
-        }
-    }
-
     async function activateCoupons() {
         if (running) {
             stopRequested = true;
@@ -157,8 +118,8 @@ Changes in this fork:
             return;
         }
 
-        let pending = findPendingButtons();
-        if (pending.length === 0) {
+        const total = findPendingButtons().length;
+        if (total === 0) {
             showMessage(T.notFound);
             console.warn(T.notFound);
             return;
@@ -166,34 +127,20 @@ Changes in this fork:
 
         running = true;
         stopRequested = false;
-        const total = pending.length;
         let clicked = 0;
-        let batchNo = 0;
 
         console.log(T.found(total));
 
-        while (!stopRequested && pending.length > 0 && clicked < total) {
-            batchNo++;
-            const batch = pending.slice(0, Math.min(settings.batchSize, total - clicked));
-            console.log(T.batch(batchNo, batch.length));
-
-            for (const btn of batch) {
-                if (stopRequested) break;
-                if (!btn.isConnected) continue;
-                clickedButtons.add(btn);
-                btn.click();
-                clicked++;
-                console.log(T.activated(clicked));
-                setButtonText(T.progress(clicked, total));
-                await sleep(randomDelay());
-            }
-
-            // Re-read the page: after activation Payback re-renders the list.
-            pending = findPendingButtons();
-            if (!stopRequested && pending.length > 0 && clicked < total) {
-                await pause(settings.batchPause, clicked, total);
-                pending = findPendingButtons();
-            }
+        // Re-read the page before every click: after activation Payback re-renders the list.
+        while (!stopRequested && clicked < total) {
+            const btn = findPendingButtons()[0];
+            if (!btn) break;
+            clickedButtons.add(btn);
+            btn.click();
+            clicked++;
+            console.log(T.activated(clicked));
+            setButtonText(T.progress(clicked, total));
+            await sleep(randomDelay());
         }
 
         const result = stopRequested ? T.stopped(clicked, total) : T.done(clicked, total);
@@ -260,21 +207,6 @@ Changes in this fork:
         label.textContent = T.switchLabel;
     }
 
-    function openSettings() {
-        const size = parseInt(prompt(T.askBatch, settings.batchSize), 10);
-        if (Number.isNaN(size)) return;
-        const pauseSec = parseFloat(prompt(T.askPause, settings.batchPause / 1000));
-        if (Number.isNaN(pauseSec)) return;
-
-        settings.batchSize = Math.max(1, size);
-        settings.batchPause = Math.max(0, pauseSec * 1000);
-        localStorage.setItem('pb_settings', JSON.stringify({
-            batchSize: settings.batchSize,
-            batchPause: settings.batchPause,
-        }));
-        showMessage(T.saved);
-    }
-
     let label;
 
     function addLanguageSwitcher() {
@@ -314,8 +246,7 @@ Changes in this fork:
             label,
             makeBtn('🇬🇧', 'EN', () => setLanguage('en')),
             makeBtn('🇩🇪', 'DE', () => setLanguage('de')),
-            makeBtn('🇷🇺', 'RU', () => setLanguage('ru')),
-            makeBtn('⚙', 'Settings', openSettings)
+            makeBtn('🇷🇺', 'RU', () => setLanguage('ru'))
         );
 
         document.body.appendChild(container);
