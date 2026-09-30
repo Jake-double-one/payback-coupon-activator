@@ -1,12 +1,12 @@
-# Payback Batch Activate Coupons
+# Payback Activate Coupons Slowly
 
 **[English](#english) · [Deutsch](#deutsch)**
 
 ## English
 
 Tampermonkey userscript for [payback.de/coupons](https://www.payback.de/coupons) that activates
-all non-activated coupons – **in batches instead of all at once**, so Payback does not
-temporarily block the account.
+all non-activated coupons – **one by one with a short delay instead of all at once**, so Payback
+does not temporarily block the account.
 
 Fork of ["Payback Manual Activate Coupons"](https://greasyfork.org/scripts/551764) by
 [Denis-Alexeev](https://github.com/Denis-Alexeev/MyUserScripts) (MIT).
@@ -14,10 +14,9 @@ Fork of ["Payback Manual Activate Coupons"](https://greasyfork.org/scripts/55176
 ### How it works
 
 - Clicking **▶ Activate Coupons** counts all non-activated coupons.
-- Activates them in batches (default: **50**), with a random delay of 250–600 ms per click.
-- Pauses between batches (default: **8 s**) and re-reads the page afterwards.
-- The button shows the progress (`⏳ 73/163`) or the pause countdown; clicking it again stops.
-- Use **⚙** to change the batch size and pause (stored in `localStorage`).
+- Clicks them one after another with a random delay of 250–600 ms (≈ 70 s for 160 coupons).
+- The button shows the progress (`⏳ 73/163`); clicking it again stops.
+- The delay can be changed via `CLICK_DELAY_MIN` / `CLICK_DELAY_MAX` at the top of the script.
 
 ### Installation
 
@@ -30,8 +29,8 @@ If the original script is installed, disable it first, otherwise two buttons wil
 ## Deutsch
 
 Tampermonkey-Userscript für [payback.de/coupons](https://www.payback.de/coupons), das alle
-nicht aktivierten Gutscheine aktiviert – **in Paketen statt alle auf einmal**, damit Payback
-das Konto nicht vorübergehend sperrt.
+nicht aktivierten Gutscheine aktiviert – **nacheinander mit kurzer Verzögerung statt alle auf einmal**,
+damit Payback das Konto nicht vorübergehend sperrt.
 
 Fork von [„Payback Manual Activate Coupons“](https://greasyfork.org/scripts/551764) von
 [Denis-Alexeev](https://github.com/Denis-Alexeev/MyUserScripts) (MIT).
@@ -39,10 +38,9 @@ Fork von [„Payback Manual Activate Coupons“](https://greasyfork.org/scripts/
 ### Funktionsweise
 
 - Zählt beim Klick auf **▶ Gutscheine aktivieren** alle nicht aktivierten Gutscheine.
-- Aktiviert sie in Paketen (Standard: **50**), mit 250–600 ms zufälliger Verzögerung pro Klick.
-- Macht zwischen den Paketen eine Pause (Standard: **8 s**) und liest die Seite danach neu ein.
-- Der Knopf zeigt den Fortschritt (`⏳ 73/163`) bzw. den Pausen-Countdown; ein erneuter Klick stoppt.
-- Über **⚙** lassen sich Paketgröße und Pause ändern (gespeichert im `localStorage`).
+- Klickt sie nacheinander mit 250–600 ms zufälliger Verzögerung an (≈ 70 s für 160 Gutscheine).
+- Der Knopf zeigt den Fortschritt (`⏳ 73/163`); ein erneuter Klick stoppt.
+- Die Verzögerung lässt sich über `CLICK_DELAY_MIN` / `CLICK_DELAY_MAX` oben im Skript ändern.
 
 ### Installation
 
